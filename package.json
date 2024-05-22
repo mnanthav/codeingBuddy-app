@@ -1,0 +1,15 @@
+{
+  "name": "codeingbuddy-app",
+  "version": "1.0.0",
+  "description": "Code(ing) Buddy Web App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js"
+  },
+  "author": "Mya Nanthavongdouangsy",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
