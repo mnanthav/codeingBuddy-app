@@ -1,6 +1,11 @@
 // client/src/App.js
 //================================================================
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import NavBar from './NavBar';
+import routes from './routes';
 import './App.css';
 
 function App() {
@@ -14,21 +19,25 @@ function App() {
      .then((data) => setData(data.message));
   })
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          { !data ? "Loading..." : data }
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <body>
+      <Router>
+        {/* Navbar */}
+        <NavBar />
+        <div>
+          <Routes>
+            {routes.map((route, index) => {
+              return (
+                <Route 
+                  key={index}
+                  path={route.path}
+                  element={route.component}
+                />
+              );
+            })}
+          </Routes>
+        </div>
+      </Router>
+    </body>
   );
 }
 
