@@ -19,9 +19,9 @@ function App() {
      .then((data) => setData(data.message));
   })
   return (
-    <body>
-      <Router>
-        {/* Navbar */}
+    <Router>
+      <body>
+      {/* Navbar */}
         <NavBar />
         <div>
           <Routes>
@@ -36,8 +36,8 @@ function App() {
             })}
           </Routes>
         </div>
-      </Router>
-    </body>
+      </body>
+    </Router>
   );
 }
 

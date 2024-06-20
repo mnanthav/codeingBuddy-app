@@ -1,37 +1,62 @@
+//================================================================
 // server/index.js
 //================================================================
-const path = require('path');
 const express = require('express');
-
-const PORT = process.env.PORT || 8888;
-
 const app = express();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const cors = require('cors');
+const helmet = require('helmet');
 
-const uri = "mongodb+srv://mnanthav:VxAk06AtXgVWVfxL@codeingbuddy.0ek911o.mongodb.net/?retryWrites=true&w=majority&appName=codeingbuddy";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+const path = require('path');
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
+dotenv.config({ path: './server/config.env' }); // import config.env file
+const db = process.env.DATABASE_URL;
+const options = {
+    connectTimeoutMS: 30000
+}
 
-client.connect(err => {
-    const collection = client.db("test").collection("devices");
+const langRoutes = require('./routes/languages.js');
 
-    // perform actions on the collection ovject 
-    console.log("Connected successfully to server");
-    client.close();
-})
+const PORT = process.env.PORT;
+
+app.use(cors());
+app.use(helmet());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+mongoose
+   .connect(db, options) // connect to database
+   .then(() => { // if successful connection
+        console.log('Database Connected');
+    })
+    .catch((error) => { // else, connection failed
+        console.log(`Cannot connect to database, ${error}`)
+    });
+
 // Have Node serve files for built react app
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 // starter endpoint
-app.get("/api", (req, res) => {
-    res.json({ message: "Welcome to Code(ing) Buddy Server!"});
+app.get("/", (req, res) => {
+    res.json({ 
+        message: "Welcome to Code(ing) Buddy Server!"
+    });
 });
+
+// ------------ routes --------------------------------
+// language routes
+app.use("/language", langRoutes);
+
+// syntax_construct routes
+// library_framework routes
+// ------------ end of routes -------------------------
 
 // All other GET requests not handled before will return React app
 app.get('*', (req,res) => {
     res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
 
-// start server
+// start server 
 app.listen(PORT, () => {
-    console.log(`Serving on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
