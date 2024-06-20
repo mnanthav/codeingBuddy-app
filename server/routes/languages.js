@@ -1,5 +1,7 @@
 //================================================================
 // server/routes/languages.js
+//----------------------------------------------------------------
+// Description: CRUD operations for language collection
 //================================================================
 const express = require('express');
 const Language = require('../models/Language');
@@ -107,8 +109,8 @@ router.get('/:name', async (req, res) => {
     }
 });
 
-// Actual endpoint: "http://localhost:8888/language/:_id"
-router.patch('/:_id', async (req, res) => {
+// Actual endpoint: "http://localhost:8888/language/:id"
+router.patch('/:id', async (req, res) => {
     // UPDATE a language by ID
 
     try {
@@ -116,57 +118,62 @@ router.patch('/:_id', async (req, res) => {
         const updatedData = req.body;
         const options = { new: true };
 
-        const result = await Language.findByIdAndUpdate(
+        let language = await Language.findByIdAndUpdate(
             id, updatedData, options
         );
 
-        if (!result) {
-            return res.status(404).json({
+        if (language) {
+            res.status(200).json(
+                {
+                    status:200,
+                    message: 'Language updated successfully',
+                    data: language
+                }
+            );
+        } else {
+            res.status(404).json({
+                status: 404,
                 message: 'Language not found'
             });
         }
-
-        res.status(200).json(
-            {
-                message: 'Language updated successfully',
-                data: result
-            }
-        );
     }
     catch (err) {
         console.error("Error updating language", err);
 
         res.status(500).json({
+            status: 500,
             message: 'Failed to update language', 
             error: err.message
         });
     }
 });
 
-// Actual endpoint: "http://localhost:8888/language/:_id"
-router.delete('/:_id', async (req, res) => {
+// Actual endpoint: "http://localhost:8888/language/:id"
+router.delete('/:id', async (req, res) => {
     // DELETE a language by ID
 
     try {
         const id = req.params.id;
-        const data = await Language.findByIdAndDelete(id);
+        let language = await Language.findByIdAndDelete(id);
 
-        if (!data) {
-            // If no data found, return 404 message
-            return res.status(404).json({
-                message: 'Language not found'
+        if (language) {
+            // Inform client if language deletion was successful
+            res.status(200).json({
+                status: 200,
+                message: `Language ${language.name} has been successfully deleted`
+            });
+        } else {
+            res.status(404).json({
+                status: 404,
+                message: 'Language not found, not deleted'
             });
         }
-
-        // Inform client if language deletion was successful
-        res.status(200).json({
-            message: `Language ${data.name} has been deleted successfully`
-        });
     }
     catch (err) {
         console.error("Error deleting language", err);
 
         res.status(500).json({
+            stattus: 500,
             message: 'Failed to delete language', 
             error: err.message
         });
