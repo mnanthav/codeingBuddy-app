@@ -173,7 +173,7 @@ router.delete('/:id', async (req, res) => {
         console.error("Error deleting language", err);
 
         res.status(500).json({
-            stattus: 500,
+            status: 500,
             message: 'Failed to delete language', 
             error: err.message
         });
