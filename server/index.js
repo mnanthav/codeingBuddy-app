@@ -16,6 +16,7 @@ const options = {
 }
 
 const langRoutes = require('./routes/languages.js');
+const syntaxRoutes = require('./routes/syntaxes.js');
 
 const PORT = process.env.PORT;
 
@@ -46,8 +47,8 @@ app.get("/", (req, res) => {
 // ------------ routes --------------------------------
 // language routes
 app.use("/language", langRoutes);
-
-// syntax_construct routes
+// syntax routes
+app.use("/syntax", syntaxRoutes);
 // library_framework routes
 // ------------ end of routes -------------------------
 

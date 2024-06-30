@@ -2,6 +2,7 @@
 // server/models/Language.js
 //================================================================
 const mongoose = require('mongoose');
+
 let Schema = mongoose.Schema;
 let languageSchema = new Schema(
     {
@@ -50,7 +51,7 @@ let languageSchema = new Schema(
         ide_extensions: {
             type: [{
                 extension: {
-                    type: String,
+                    type: String
                 },
                 description: {
                     type: String
@@ -61,7 +62,7 @@ let languageSchema = new Schema(
         commonly_used: {
             type: [{
                 use: {
-                    type: String,
+                    type: String
                 },
                 description: {
                     type: String
@@ -77,6 +78,6 @@ function urlValidator(value) {
     return /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i.test(value);
 }
 
-let Language = mongoose.model('language', languageSchema);
+let Language = mongoose.model('Language', languageSchema);
 
 module.exports = Language;
